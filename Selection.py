@@ -30,7 +30,7 @@ def tournament_selection(population, fitness, k=2, n_select=4):
         selected.append(winner[0])
     return selected
 
-# ----- 4. Stochastic Universal Sampling (Optional Stub) -----
+# ----- 4. Stochastic Universal Sampling (SUS) -----
 def sus_selection(population, fitness, n_select=4):
     prob = fitness / np.sum(fitness)
     cum_prob = np.cumsum(prob)
@@ -75,6 +75,16 @@ def steady_state_selection(population, fitness, num_replace=2):
     print("New Individuals Added:", new_individuals)
     return new_population
 
+# ----- 7. Canonical (Deterministic) Selection -----
+def canonical_selection(population, fitness, n_select=4):
+    """
+    Selects the top n_select individuals with highest fitness deterministically.
+    """
+    sorted_indices = np.argsort(fitness)[::-1]  # sort by descending fitness
+    selected = [population[i] for i in sorted_indices[:n_select]]
+    print("\nFitness:", fitness)
+    print("Selected (Highest Fitness First):", selected)
+    return selected
 
 # ----- Display Menu -----
 def menu():
@@ -87,12 +97,13 @@ def menu():
     print("4. Stochastic Universal Sampling (SUS)")
     print("5. Elitism Selection")
     print("6. Steady-State Selection")
-    print("7. Exit")
+    print("7. Canonical Selection")
+    print("8. Exit")
 
 # ----- Main Program -----
 while True:
     menu()
-    choice = int(input("\nEnter your choice (1-7): "))
+    choice = int(input("\nEnter your choice (1-8): "))
 
     if choice == 1:
         selected = roulette_wheel_selection(population, fitness)
@@ -121,8 +132,12 @@ while True:
         print("New Population after Steady-State:", new_population)
 
     elif choice == 7:
+        selected = canonical_selection(population, fitness)
+        print("Selected Chromosomes:", selected)
+
+    elif choice == 8:
         print("\nExiting... Thank you!")
         break
 
     else:
-        print("Invalid choice! Please enter between 1-7.")
+        print("Invalid choice! Please enter between 1-8.")
